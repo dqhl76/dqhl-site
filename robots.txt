@@ -1,0 +1,3 @@
+User-agent: *
+Disallow:
+Sitemap: https://realdqhl.com/sitemap.xml
