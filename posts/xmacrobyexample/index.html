@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>XMACROByExample | dqhl</title>
+<meta name="keywords" content="">
+<meta name="description" content="在写南京大学 计算机系统基础 课程实验时，看到代码中大量出现了各种宏定义，了解后得知，这是一些X-MACRO，搜索了相关的知识之后我试图逐个的去将这些宏定义展开，下面的文章我将这个展开的过程记录了下来，并且穿插了一些宏定义的相关知识，所以你可以把这篇文章当作一个X-MACRO By Example
+本文的例子来自于这个课程实验的nemu部分，文件所在位置：/nemu/include/macro.h
+#define STRLEN(CONST_STR) (sizeof(CONST_STR) - 1) STRLEN()可以给出一个字符串的长度，CONST_STR作为参数传入
+#define str_temp(x) #x #define str(x) str_temp(x) When a macro parameter is used with a leading ‘#’, the preprocessor replaces it with the literal text of the actual argument, converted to a string constant. - GCC GNU Online Doc
+这里的#在GCC GNU Online Doc中描述如上，可以简单的理解为给这个参数加上了一个&quot;&quot;，类型为字符串常量
+#define str_temp(x) #x #define str(x) str_temp(x) ... printf(str(test)); 我们可以使用gcc -E的编译选项将其展开，可以得到如下的结果
+printf(&#34;test&#34;); #define ARRLEN(arr) (int)(sizeof(arr) / sizeof(arr[0])) 计算一个数组的长度，简单将其展开即可">
+<meta name="author" content="">
+<link rel="canonical" href="https://realdqhl.com/posts/xmacrobyexample/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.bc1149f4a72aa4858d3a9f71462f75e5884ffe8073ea9d6d5761d5663d651e20.css" integrity="sha256-vBFJ9KcqpIWNOp9xRi915YhP/oBz6p1tV2HVZj1lHiA=" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="/assets/js/highlight.f413e19d0714851f6474e7ee9632408e58ac146fbdbe62747134bea2fa3415e0.js" integrity="sha256-9BPhnQcUhR9kdOfuljJAjlisFG&#43;9vmJ0cTS&#43;ovo0FeA="
+    onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="https://realdqhl.com/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://realdqhl.com/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://realdqhl.com/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://realdqhl.com/apple-touch-icon.png">
+<link rel="mask-icon" href="https://realdqhl.com/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="XMACROByExample" />
+<meta property="og:description" content="在写南京大学 计算机系统基础 课程实验时，看到代码中大量出现了各种宏定义，了解后得知，这是一些X-MACRO，搜索了相关的知识之后我试图逐个的去将这些宏定义展开，下面的文章我将这个展开的过程记录了下来，并且穿插了一些宏定义的相关知识，所以你可以把这篇文章当作一个X-MACRO By Example
+本文的例子来自于这个课程实验的nemu部分，文件所在位置：/nemu/include/macro.h
+#define STRLEN(CONST_STR) (sizeof(CONST_STR) - 1) STRLEN()可以给出一个字符串的长度，CONST_STR作为参数传入
+#define str_temp(x) #x #define str(x) str_temp(x) When a macro parameter is used with a leading ‘#’, the preprocessor replaces it with the literal text of the actual argument, converted to a string constant. - GCC GNU Online Doc
+这里的#在GCC GNU Online Doc中描述如上，可以简单的理解为给这个参数加上了一个&quot;&quot;，类型为字符串常量
+#define str_temp(x) #x #define str(x) str_temp(x) ... printf(str(test)); 我们可以使用gcc -E的编译选项将其展开，可以得到如下的结果
+printf(&#34;test&#34;); #define ARRLEN(arr) (int)(sizeof(arr) / sizeof(arr[0])) 计算一个数组的长度，简单将其展开即可" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://realdqhl.com/posts/xmacrobyexample/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-08-27T15:50:34&#43;08:00" />
+<meta property="article:modified_time" content="2022-08-27T15:50:34&#43;08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="XMACROByExample"/>
+<meta name="twitter:description" content="在写南京大学 计算机系统基础 课程实验时，看到代码中大量出现了各种宏定义，了解后得知，这是一些X-MACRO，搜索了相关的知识之后我试图逐个的去将这些宏定义展开，下面的文章我将这个展开的过程记录了下来，并且穿插了一些宏定义的相关知识，所以你可以把这篇文章当作一个X-MACRO By Example
+本文的例子来自于这个课程实验的nemu部分，文件所在位置：/nemu/include/macro.h
+#define STRLEN(CONST_STR) (sizeof(CONST_STR) - 1) STRLEN()可以给出一个字符串的长度，CONST_STR作为参数传入
+#define str_temp(x) #x #define str(x) str_temp(x) When a macro parameter is used with a leading ‘#’, the preprocessor replaces it with the literal text of the actual argument, converted to a string constant. - GCC GNU Online Doc
+这里的#在GCC GNU Online Doc中描述如上，可以简单的理解为给这个参数加上了一个&quot;&quot;，类型为字符串常量
+#define str_temp(x) #x #define str(x) str_temp(x) ... printf(str(test)); 我们可以使用gcc -E的编译选项将其展开，可以得到如下的结果
+printf(&#34;test&#34;); #define ARRLEN(arr) (int)(sizeof(arr) / sizeof(arr[0])) 计算一个数组的长度，简单将其展开即可"/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Posts",
+      "item": "https://realdqhl.com/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  3 ,
+      "name": "XMACROByExample",
+      "item": "https://realdqhl.com/posts/xmacrobyexample/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "XMACROByExample",
+  "name": "XMACROByExample",
+  "description": "在写南京大学 计算机系统基础 课程实验时，看到代码中大量出现了各种宏定义，了解后得知，这是一些X-MACRO，搜索了相关的知识之后我试图逐个的去将这些宏定义展开，下面的文章我将这个展开的过程记录了下来，并且穿插了一些宏定义的相关知识，所以你可以把这篇文章当作一个X-MACRO By Example\n本文的例子来自于这个课程实验的nemu部分，文件所在位置：/nemu/include/macro.h\n#define STRLEN(CONST_STR) (sizeof(CONST_STR) - 1) STRLEN()可以给出一个字符串的长度，CONST_STR作为参数传入\n#define str_temp(x) #x #define str(x) str_temp(x) When a macro parameter is used with a leading ‘#’, the preprocessor replaces it with the literal text of the actual argument, converted to a string constant. - GCC GNU Online Doc\n这里的#在GCC GNU Online Doc中描述如上，可以简单的理解为给这个参数加上了一个\u0026quot;\u0026quot;，类型为字符串常量\n#define str_temp(x) #x #define str(x) str_temp(x) ... printf(str(test)); 我们可以使用gcc -E的编译选项将其展开，可以得到如下的结果\nprintf(\u0026#34;test\u0026#34;); #define ARRLEN(arr) (int)(sizeof(arr) / sizeof(arr[0])) 计算一个数组的长度，简单将其展开即可",
+  "keywords": [
+    
+  ],
+  "articleBody": "在写南京大学 计算机系统基础 课程实验时，看到代码中大量出现了各种宏定义，了解后得知，这是一些X-MACRO，搜索了相关的知识之后我试图逐个的去将这些宏定义展开，下面的文章我将这个展开的过程记录了下来，并且穿插了一些宏定义的相关知识，所以你可以把这篇文章当作一个X-MACRO By Example\n本文的例子来自于这个课程实验的nemu部分，文件所在位置：/nemu/include/macro.h\n#define STRLEN(CONST_STR) (sizeof(CONST_STR) - 1) STRLEN()可以给出一个字符串的长度，CONST_STR作为参数传入\n#define str_temp(x) #x #define str(x) str_temp(x) When a macro parameter is used with a leading ‘#’, the preprocessor replaces it with the literal text of the actual argument, converted to a string constant. - GCC GNU Online Doc\n这里的#在GCC GNU Online Doc中描述如上，可以简单的理解为给这个参数加上了一个\"\"，类型为字符串常量\n#define str_temp(x) #x #define str(x) str_temp(x) ... printf(str(test)); 我们可以使用gcc -E的编译选项将其展开，可以得到如下的结果\nprintf(\"test\"); #define ARRLEN(arr) (int)(sizeof(arr) / sizeof(arr[0])) 计算一个数组的长度，简单将其展开即可\nprintf(\"%d\",(int)(sizeof(a) / sizeof(a[0]))); #define concat_temp(x, y) x ## y When a macro is expanded, the two tokens on either side of each ‘##’ operator are combined into a single token, which then replaces the ‘##’ and the two original tokens in the macro expansion. - GCC GNU Online Doc\n这里出现了另一个宏定义中重要的符号##，可以简单的理解为将##左右两边的东西(token)合(combine)在一起，合在一起后可以用作变量名，或继续作为参数传给别的宏，这里给出一个例子以及展开后的结果\n#define concat_temp(x, y) x ## y ... int ab = 3; printf(\"%d\", concat_temp(a,b)); 展开后可以得到\nint ab = 3; printf(\"%d\", ab); 可以规定其他的宏定义来将更多的参数连接在一起\n#define concat(x, y) concat_temp(x, y) #define concat3(x, y, z) concat(concat(x, y), z) #define concat4(x, y, z, w) concat3(concat(x, y), z) #define concat5(x, y, z, v, w) concat4(concat(x, y), z) 接下来我们考虑一个问题，应当如何检测某个宏是否已经被定义了，我们很自然的可以写出如下的代码\n#ifdef TEST printf(\"Macro TEST has been defined.\"); #endif 但是我们无法在宏中使用#ifdef，并且大量的使用#ifdef代码会被分割为不同的部分降低代码的可读性，那我们有没有可能写出形如#define TRACE(macro,message) if(IS_DEFINED(macro)){ std::cout \u003c\u003c message; }的宏定义来实现如果宏macro已经被定义，则输出message的功能\n#define TEST 123 #define TRACE(macro, message) \\ if (strcmp(\"\" #macro, str(macro))) \\ printf(\"%s\",message); TRACE(TEST,\"This Macro has been defined\") 我们使用gcc -E将其展开后得到\nif (strcmp(\"TEST\", \"123\")) printf(\"%s\",\"This Macro has been defined\"); 这里我们用到了之前提到的过的#运算符和定义过的str()宏，#macro会变为\"TEST\"，而因为str(TEST)，会首先将其展开为str_temp(123)，随后再使用#123将其变为\"123\"，此时就会产生strcmp(\"TEST\",\"123\")，因为两个字符串不同strcmp()返回值不为0，C语言中非0值都为真，所以输出了message对应的语句\n如果此时TEST没有被定义，则在str(TEST)后仍然会得到str_temp(TEST)，自然最后的得到的结果就是 strcmp(\"TEST\",\"TEST\")，字符串相同，结果返回0.\n这个宏同样可以用于函数宏（function-like macro)，即对于STRLEN(CONST_STR) ARRLEN(arr)同样生效\n需要注意的是，如果出现了自己定义自己的情况，如#define FOO FOO，则这个宏定义会出现问题，\n我们可以把其中的strcmp拿出来单独写一个isdef来检测某个宏是否被定义\n#define isdef(macro) (strcmp(\"\" #macro, str(macro))!=0) 但是因为isdef调用了strcmp()，所以它只能在一个函数内工作，我们能不能写出一个不依赖函数的宏定义来完成这一工作，这里首先给出框架代码中的代码\n#define __P_ONE_1 X, #define CHOOSE2nd(a, b, ...) b #define MUX_WITH_COMMA(contain_comma, a, b) CHOOSE2nd(contain_comma a, b) #define MUX_MACRO_PROPERTY(p, macro, a, b) MUX_WITH_COMMA(concat(p, macro), a, b) #define MUXONE(macro, X, Y) MUX_MACRO_PROPERTY(__P_ONE_, macro, X, Y) #define ISONE(macro) MUXONE(macro, 1, 0) 这段代码实现了检测宏是否为1的情况，我们一步一步分析\n#define MUX_MACRO_PROPERTY(p, macro, a, b) MUX_WITH_COMMA(concat(p, macro), a, b) #define MUXONE(macro, X, Y) MUX_MACRO_PROPERTY(__P_ONE_, macro, X, Y) #define ISONE(macro) MUXONE(macro, 1, 0) 假设我们定义了一个宏TEST为1，并将其传入了ISONE，途径MUXONE和MUX_MACRO_PROPERTY 传入MUX_WITH_COMMA的参数如下所示（注意TEST被定义为1）\nMUX_WITH_COMMA(concat(__P_ONE_, 1), 1, 0) MUX_WITH_COMMA(__P_ONE_1, 1, 0) CHOOSE2nd(contain_comma a, b)这一步中contain_comma 和a中间没有逗号，以一个空格隔开，这意味着如果TEST被定义为1，那么contain_comma则会为__P_ONE_1，而__P_ONE_1又将被替换为X,，此时CHOOSE2nd(X, 1, 0)的第二参数即为1\n如果TEST没有被定义，或者定义了但不为1，那么在contain_comma就将为__P_ONE_TEST，此时不会被替换为x,，那么CHOOSE2nd(__P_ONE_TEST 1, 0)的第二参数即为0，这就是我们为什么要向#define __P_ONE_1 X,的X后面加上一个逗号\n我们只是举了一个例子，我们还可以检测某个宏是否0，或是某个宏是否是1或0，在我们可以判断一个宏是否为0或1后，我们就可以编写这样的宏\nif(ISDEF(macro)){ KEEP_CODE ... } #define __P_DEF_0 X, #define __P_DEF_1 X, #define MUXDEF(macro, X, Y) MUX_MACRO_PROPERTY(__P_DEF_, macro, X, Y) #define __IGNORE(...) #define __KEEP(...) __VA_ARGS__ #define IFDEF(macro, ...) MUXDEF(macro, __KEEP, __IGNORE)(__VA_ARGS__) 参考 3 Macros - GCC GNU Doc\nnju-pa摸鱼记2-计算机与λ演算\n",
+  "wordCount" : "349",
+  "inLanguage": "en",
+  "datePublished": "2022-08-27T15:50:34+08:00",
+  "dateModified": "2022-08-27T15:50:34+08:00",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://realdqhl.com/posts/xmacrobyexample/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "dqhl",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://realdqhl.com/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://realdqhl.com" accesskey="h" title="dqhl (Alt + H)">dqhl</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title">
+      XMACROByExample
+    </h1>
+    <div class="post-meta"><span title='2022-08-27 15:50:34 +0800 CST'>August 27, 2022</span>
+
+</div>
+  </header> 
+  <div class="post-content"><p>在写<a href="https://nju-projectn.github.io/ics-pa-gitbook/ics2022/">南京大学 计算机系统基础 课程实验</a>时，看到代码中大量出现了各种宏定义，了解后得知，这是一些X-MACRO，搜索了相关的知识之后我试图逐个的去将这些宏定义展开，下面的文章我将这个展开的过程记录了下来，并且穿插了一些宏定义的相关知识，所以你可以把这篇文章当作一个<strong>X-MACRO By Example</strong></p>
+<p><em>本文的例子来自于这个课程实验的nemu部分，文件所在位置：/nemu/include/macro.h</em></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span><span style="color:#75715e">#define STRLEN(CONST_STR) (sizeof(CONST_STR) - 1)
+</span></span></span></code></pre></div><p><code>STRLEN()</code>可以给出一个字符串的长度，<code>CONST_STR</code>作为参数传入</p>
+<pre tabindex="0"><code class="language-pseudocode" data-lang="pseudocode">#define str_temp(x) #x
+#define str(x) str_temp(x)
+</code></pre><blockquote>
+<p>When a macro parameter is used with a leading ‘#’, the preprocessor replaces it with the literal text of the actual argument, converted to a string constant.  - <a href="https://gcc.gnu.org/onlinedocs/cpp/Stringizing.html#Stringizing">GCC GNU Online Doc</a></p>
+</blockquote>
+<p>这里的#在GCC GNU Online Doc中描述如上，可以简单的理解为给这个参数加上了一个<code>&quot;&quot;</code>，类型为字符串常量</p>
+<pre tabindex="0"><code class="language-pseudocode" data-lang="pseudocode">#define str_temp(x) #x
+#define str(x) str_temp(x)
+...
+printf(str(test));
+</code></pre><p>我们可以使用<code>gcc -E</code>的编译选项将其展开，可以得到如下的结果</p>
+<pre tabindex="0"><code class="language-pseudocode" data-lang="pseudocode">printf(&#34;test&#34;);
+</code></pre><pre tabindex="0"><code class="language-pseudocode" data-lang="pseudocode">#define ARRLEN(arr) (int)(sizeof(arr) / sizeof(arr[0]))
+</code></pre><p>计算一个数组的长度，简单将其展开即可</p>
+<pre tabindex="0"><code class="language-pseudocode" data-lang="pseudocode">printf(&#34;%d&#34;,(int)(sizeof(a) / sizeof(a[0])));
+</code></pre><pre tabindex="0"><code class="language-pseudocode" data-lang="pseudocode">#define concat_temp(x, y) x ## y
+</code></pre><blockquote>
+<p>When a macro is expanded, the two tokens on either side of each ‘##’ operator are combined into a single token, which then replaces the ‘##’ and the two original tokens in the macro expansion.  - <a href="https://gcc.gnu.org/onlinedocs/cpp/Stringizing.html#Stringizing">GCC GNU Online Doc</a></p>
+</blockquote>
+<p>这里出现了另一个宏定义中重要的符号<code>##</code>，可以简单的理解为将<code>##</code>左右两边的东西(token)合(combine)在一起，合在一起后可以用作变量名，或继续作为参数传给别的宏，这里给出一个例子以及展开后的结果</p>
+<pre tabindex="0"><code class="language-pseudocode" data-lang="pseudocode">#define concat_temp(x, y) x ## y
+...
+int ab = 3;
+printf(&#34;%d&#34;, concat_temp(a,b));
+</code></pre><p>展开后可以得到</p>
+<pre tabindex="0"><code class="language-pseudocode" data-lang="pseudocode">int ab = 3;
+printf(&#34;%d&#34;, ab);
+</code></pre><p>可以规定其他的宏定义来将更多的参数连接在一起</p>
+<pre tabindex="0"><code class="language-pseudocode" data-lang="pseudocode">#define concat(x, y) concat_temp(x, y)
+#define concat3(x, y, z) concat(concat(x, y), z)
+#define concat4(x, y, z, w) concat3(concat(x, y), z)
+#define concat5(x, y, z, v, w) concat4(concat(x, y), z)
+</code></pre><p>接下来我们考虑一个问题，应当如何检测某个宏是否已经被定义了，我们很自然的可以写出如下的代码</p>
+<pre tabindex="0"><code class="language-pseudocode" data-lang="pseudocode">#ifdef TEST
+    printf(&#34;Macro TEST has been defined.&#34;);
+#endif
+</code></pre><p>但是我们无法在宏中使用<code>#ifdef</code>，并且大量的使用<code>#ifdef</code>代码会被分割为不同的部分降低代码的可读性，那我们有没有可能写出形如<code>#define TRACE(macro,message) if(IS_DEFINED(macro)){ std::cout &lt;&lt; message; }</code>的宏定义来实现如果宏<code>macro</code>已经被定义，则输出<code>message</code>的功能</p>
+<pre tabindex="0"><code class="language-pseudocode" data-lang="pseudocode">#define TEST 123
+#define TRACE(macro, message) \
+    if (strcmp(&#34;&#34; #macro, str(macro))) \
+        printf(&#34;%s&#34;,message);
+TRACE(TEST,&#34;This Macro has been defined&#34;)
+</code></pre><p>我们使用<code>gcc -E</code>将其展开后得到</p>
+<pre tabindex="0"><code class="language-pseudocode" data-lang="pseudocode">if (strcmp(&#34;TEST&#34;, &#34;123&#34;)) printf(&#34;%s&#34;,&#34;This Macro has been defined&#34;);
+</code></pre><p>这里我们用到了之前提到的过的<code>#</code>运算符和定义过的<code>str()</code>宏，<code>#macro</code>会变为<code>&quot;TEST&quot;</code>，而因为<code>str(TEST)</code>，会首先将其展开为<code>str_temp(123)</code>，随后再使用<code>#123</code>将其变为<code>&quot;123&quot;</code>，此时就会产生<code>strcmp(&quot;TEST&quot;,&quot;123&quot;)</code>，因为两个字符串不同<code>strcmp()</code>返回值不为0，C语言中非0值都为真，所以输出了message对应的语句</p>
+<p>如果此时<code>TEST</code>没有被定义，则在<code>str(TEST)</code>后仍然会得到<code>str_temp(TEST)</code>，自然最后的得到的结果就是 <code>strcmp(&quot;TEST&quot;,&quot;TEST&quot;)</code>，字符串相同，结果返回0.</p>
+<p>这个宏同样可以用于<a href="https://gcc.gnu.org/onlinedocs/cpp/Function-like-Macros.html#Function-like-Macros">函数宏（function-like macro)</a>，即对于<code>STRLEN(CONST_STR)</code> <code>ARRLEN(arr)</code>同样生效</p>
+<p>需要注意的是，如果出现了自己定义自己的情况，如<code>#define FOO FOO</code>，则这个宏定义会出现问题，</p>
+<p>我们可以把其中的<code>strcmp</code>拿出来单独写一个<code>isdef</code>来检测某个宏是否被定义</p>
+<pre tabindex="0"><code class="language-pseudocode" data-lang="pseudocode">#define isdef(macro) (strcmp(&#34;&#34; #macro, str(macro))!=0)
+</code></pre><p>但是因为<code>isdef</code>调用了<code>strcmp()</code>，所以它只能在一个函数内工作，我们能不能写出一个不依赖函数的宏定义来完成这一工作，这里首先给出框架代码中的代码</p>
+<pre tabindex="0"><code class="language-pseudocode" data-lang="pseudocode">#define __P_ONE_1 X,
+#define CHOOSE2nd(a, b, ...) b
+#define MUX_WITH_COMMA(contain_comma, a, b) CHOOSE2nd(contain_comma a, b)
+#define MUX_MACRO_PROPERTY(p, macro, a, b) MUX_WITH_COMMA(concat(p, macro), a, b)
+#define MUXONE(macro, X, Y) MUX_MACRO_PROPERTY(__P_ONE_, macro, X, Y)
+#define ISONE(macro) MUXONE(macro, 1, 0)
+</code></pre><p>这段代码实现了检测宏是否为1的情况，我们一步一步分析</p>
+<pre tabindex="0"><code class="language-pseudocode" data-lang="pseudocode">#define MUX_MACRO_PROPERTY(p, macro, a, b) MUX_WITH_COMMA(concat(p, macro), a, b)
+#define MUXONE(macro, X, Y) MUX_MACRO_PROPERTY(__P_ONE_, macro, X, Y)
+#define ISONE(macro) MUXONE(macro, 1, 0)
+</code></pre><p>假设我们定义了一个宏TEST为1，并将其传入了<code>ISONE</code>，途径<code>MUXONE</code>和<code>MUX_MACRO_PROPERTY </code>传入<code>MUX_WITH_COMMA</code>的参数如下所示（注意TEST被定义为1）</p>
+<pre tabindex="0"><code class="language-pseudocode" data-lang="pseudocode">MUX_WITH_COMMA(concat(__P_ONE_, 1), 1, 0)
+MUX_WITH_COMMA(__P_ONE_1, 1, 0)
+</code></pre><p><code>CHOOSE2nd(contain_comma a, b)</code>这一步中<code>contain_comma</code> 和<code>a</code>中间没有逗号，以一个空格隔开，这意味着如果TEST被定义为1，那么<code>contain_comma</code>则会为<code>__P_ONE_1</code>，而<code>__P_ONE_1</code>又将被替换为<code>X,</code>，此时<code>CHOOSE2nd(X, 1, 0)</code>的第二参数即为1</p>
+<p>如果TEST没有被定义，或者定义了但不为1，那么在<code>contain_comma</code>就将为<code>__P_ONE_TEST</code>，此时不会被替换为<code>x,</code>，那么<code>CHOOSE2nd(__P_ONE_TEST 1, 0)</code>的第二参数即为0，这就是我们为什么要向<code>#define __P_ONE_1 X,</code>的X后面加上一个逗号</p>
+<p>我们只是举了一个例子，我们还可以检测某个宏是否0，或是某个宏是否是1或0，在我们可以判断一个宏是否为0或1后，我们就可以编写这样的宏</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span><span style="color:#66d9ef">if</span>(ISDEF(macro)){
+</span></span><span style="display:flex;"><span>	KEEP_CODE ...
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><pre tabindex="0"><code class="language-pseudocode" data-lang="pseudocode">#define __P_DEF_0 X,
+#define __P_DEF_1 X,
+#define MUXDEF(macro, X, Y) MUX_MACRO_PROPERTY(__P_DEF_, macro, X, Y)
+#define __IGNORE(...)
+#define __KEEP(...) __VA_ARGS__
+#define IFDEF(macro, ...) MUXDEF(macro, __KEEP, __IGNORE)(__VA_ARGS__)
+</code></pre><h4 id="参考">参考<a hidden class="anchor" aria-hidden="true" href="#参考">#</a></h4>
+<p><a href="https://gcc.gnu.org/onlinedocs/cpp/Macros.html">3 Macros - GCC GNU Doc</a></p>
+<p><a href="https://www.bilibili.com/read/cv15084110?spm_id_from=333.999.0.0">nju-pa摸鱼记2-计算机与λ演算</a></p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+    </ul>
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>©2022 dqhl</span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+</body>
+
+</html>
